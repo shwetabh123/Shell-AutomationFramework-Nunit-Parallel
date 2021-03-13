@@ -47,6 +47,48 @@ namespace Test.Pages
         private IWebElement Save { get; set; }
         [FindsBy(How = How.XPath, Using = "")]
         private IWebElement CustomerDetails { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Address { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement NewAddress { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement AddressTextBox { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Address_City { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Address_Region { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Address_PostalCode { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Address_AddressType_Main { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Address_AddressType_Registered { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Address_AddressType_Correspondence { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Customer_HeaderTab { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Contacts { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Contacts_NewContact { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Contacts_ForeName { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Contacts_SurName { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Contacts_Telephone { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Contacts_Email { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Contacts_PinDelivery { get; set; }
+        [FindsBy(How = How.XPath, Using = "")]
+        private IWebElement Contacts_CardDelivery { get; set; }
+     
+
+
         public Customer()
         {
             PageFactory.InitElements(DriverContext.GetDriver<IWebDriver>(), this);
@@ -64,7 +106,8 @@ namespace Test.Pages
             IWebElement selectcolco = GenericHelper.FindElementWithXpath(xpathgenerated);
             GenericHelper.JavaScriptClick(selectcolco);
         }
-        public string CreateCustomerDetails(string colconame, int i, string lineofbusiness, string band)
+       // public string CreateCustomerDetails(string colconame, int i, string lineofbusiness, string band)
+            public string CreateCustomerDetails(string colconame, int i)
         {
             string customerERP = "";
             string pth = AppDomain.CurrentDomain.BaseDirectory;
@@ -106,12 +149,68 @@ namespace Test.Pages
             }
             return customerERP;
         }
-        public void CustomerAddress()
+        public void CustomerAddress(int i)
         {
             string fileName = ConfigReader.TestDataFilepath;
             ExcelHelper eat = new ExcelHelper(fileName);
+            string strWorksheetName = eat.getExcelSheetName(fileName,2);
             Actions action = new Actions(DriverContext.GetDriver<IWebDriver>());
             action.MoveToElement(CustomerDetails).Build().Perform();
+            action.MoveToElement(Address).Build().Perform();
+            Address.Click();
+            NewAddress.Click();
+            TextBoxHelper.TypeInTextBox(AddressTextBox,eat.GetCellData("Address","AddressTextBox",i));
+            TextBoxHelper.TypeInTextBox(Address_City, eat.GetCellData("Address", "Address_city", i));
+
+            ComboBoxHelper.SelectElementByText(Address_Region,eat.GetCellData("Address","Address_Region",i));
+
+            TextBoxHelper.TypeInTextBox(Address_PostalCode, eat.GetCellData("Address", "Address_PostalCode", i));
+
+            Address_AddressType_Main.Click();
+
+            Address_AddressType_Registered.Click();
+
+            Address_AddressType_Correspondence.Click();
+
+            Save.Click();
+
         }
+
+
+
+        public void CustomerContacts(int i)
+        {
+            string fileName = ConfigReader.TestDataFilepath;
+            ExcelHelper eat = new ExcelHelper(fileName);
+            string strWorksheetName = eat.getExcelSheetName(fileName, 3);
+
+            Actions action = new Actions(DriverContext.GetDriver<IWebDriver>());
+            action.MoveToElement(Customer_HeaderTab).Build().Perform();
+            action.MoveToElement(Contacts).Build().Perform();
+
+            Contacts.Click();
+
+            Contacts_NewContact.Click();
+            TextBoxHelper.TypeInTextBox(Contacts_ForeName, eat.GetCellData("Contacts", "Contacts_ForeName", i));
+
+            TextBoxHelper.TypeInTextBox(Contacts_SurName, eat.GetCellData("Contacts", "Contacts_SurName", i));
+
+            TextBoxHelper.TypeInTextBox(Contacts_Telephone, eat.GetCellData("Contacts", "Contacts_Telephone", i));
+
+            TextBoxHelper.TypeInTextBox(Contacts_Email, eat.GetCellData("Contacts", "Contacts_Email", i));
+
+            Contacts_PinDelivery.Click();
+
+            Contacts_CardDelivery.Click();
+
+            Save.Click();
+
+
+
+
+
+
+        }
+
     }
-}
+    }

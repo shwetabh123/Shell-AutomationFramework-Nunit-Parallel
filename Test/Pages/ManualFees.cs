@@ -19,6 +19,8 @@ namespace Test.Pages
             this.ManualFeees = By.XPath("");
             this.NewManualFees = By.XPath("");
             this.SearchMenu = By.XPath("");
+
+
             }
         public void NavigatetoandCreateManualFees(string quantity,string unitprice,string manaulfeetext)
         {
